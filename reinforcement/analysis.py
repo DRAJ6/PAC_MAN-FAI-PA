@@ -23,7 +23,7 @@ def question2a():
     """
       Prefer the close exit (+1), risking the cliff (-10).
     """
-    answerDiscount = 0.5  # A moderated value here makes the agent prefer the close exit for immediate rewards.
+    answerDiscount = 0.5  # A moderate value here makes the agent prefer the close exit for immediate rewards.
     answerNoise = 0.1  # A lower value for noise ensures deterministic behavior of the agent when moving towards cliff.
     answerLivingReward = -3.0  # A negative value lets the agent to end the game because of negative rewards.
     return answerDiscount, answerNoise, answerLivingReward
@@ -34,7 +34,7 @@ def question2b():
     """
       Prefer the close exit (+1), but avoiding the cliff (-10).
     """
-    answerDiscount = 0.5  # A moderated value here makes the agent prefer the close exit for immediate rewards.
+    answerDiscount = 0.5  # A moderate value here makes the agent prefer the close exit for immediate rewards.
     answerNoise = 0.1  # A lower value for noise ensures deterministic behavior of the agent when moving towards cliff.
     answerLivingReward = -1.0  # A lesser negative value here compared to previous case is used as the agent will
     # find an exit to end that game because of negative rewards and also plans for safer path.
@@ -70,7 +70,7 @@ def question2e():
     """
       Avoid both exits and the cliff (so an episode should never terminate).
     """
-    answerDiscount = 0  # A value of 0 here makes the exits and cliffs less appealing.
+    answerDiscount = 0  # A value of 0 here makes the exits and cliffs less appealing for the agent.
     answerNoise = 0.3  # A positive value for noise in the scenario create randomness to any direct path.
     answerLivingReward = 0.1  # The low reward value helps the agent to move to another states avoiding terminal state.
     return answerDiscount, answerNoise, answerLivingReward

